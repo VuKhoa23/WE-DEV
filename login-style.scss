@@ -1,23 +1,26 @@
-$login-zone-bgcolor: darkblue;
-$text-color: #fff;
+$login-zone-bgcolor: gray;
+$login-zone-text-color: hsl(0, 0%, 100%);
+$text-font-size: 16px;
 
 
 .login-zone {
     width: 420px;
     background-color: $login-zone-bgcolor;
+    padding: 30px 40px;
+    color: $login-zone-text-color;
 }
 
 .login-zone h1 {
     font-size: 36px;
     text-align: center;
-    color: $text-color;
+    color: $login-zone-text-color;
 }
 
 .login-zone .input-box{
     width: 80%;
-    height: 50px;
-    margin: 30px 0;
-    padding: 30px;
+    height: 45px;
+    margin: 0px 0;
+    padding: 10px;
 }
 
 .input-box input {
@@ -28,14 +31,14 @@ $text-color: #fff;
     background: transparent;
     border: 2px solid rgba(255, 255, 255, .2);
     border-radius: 40px;;
-    font-size: 16px;
-    color: $text-color;
+    font-size: $text-font-size;
+    color: $login-zone-text-color;
     padding-left: 50px; 
     text-indent: 0px;
 }
 
 .input-box input::placeholder {
-    font: $text-color;
+    color: $login-zone-text-color;
 }
 
 .input-box {
@@ -56,4 +59,66 @@ $text-color: #fff;
     top: 55%;
     transform: translateY(-50%);
     font-size: 25px;
+}
+
+.login-zone .remember-forget {
+    display: flex;
+    justify-content: space-between;
+    font-size: $text-font-size;  
+    margin: 15px 0 15px;
+}
+
+.remember-forget label input {
+    accent-color: $login-zone-text-color;
+    margin: 0px 0px 0px 30px;
+}
+
+.remember-forget label {
+    color: $login-zone-text-color;
+}
+
+.remember-forget a {
+    color: $login-zone-text-color;
+    text-decoration: none;
+    margin: 0 30px 0 0;
+}
+
+.remember-forget a:hover {
+    text-decoration: underline;
+}
+
+#login-btn {
+    width: 80%;
+    height: 45px;
+    padding: 10px;
+    background: #fff;
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+    cursor: pointer;
+    font-size:$text-font-size;
+    color: #333;
+    font-weight: 600;
+    margin-left: 40px;
+}
+
+.register {
+    color: $login-zone-text-color;
+}
+
+.login-zone .register {
+    font-size: $text-font-size;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.register p a {
+    color: $login-zone-text-color;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.register p a:hover {
+    text-decoration: underline;
 }
