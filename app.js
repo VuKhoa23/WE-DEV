@@ -19,10 +19,6 @@ app.use(
 // bootstrap
 app.use("/css", express.static(__dirname + "/node_modules/bootstrap/dist/css"));
 // apply bootstrap to wedev urls
-app.use(
-  "/wedev/css",
-  express.static(__dirname + "/node_modules/bootstrap/dist/css")
-);
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
