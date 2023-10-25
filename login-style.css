@@ -1,8 +1,21 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: url("./purplegrey.svg") no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
 .login-zone {
   width: 420px;
-  background-color: gray;
+  background: transparent;
   padding: 30px 40px;
   color: hsl(0, 0%, 100%);
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur();
 }
 
 .login-zone h1 {
@@ -105,7 +118,7 @@
 .login-zone .register {
   font-size: 16px;
   text-align: center;
-  margin-top: 30px;
+  margin: 20px 0 15px;
 }
 
 .register p a {
