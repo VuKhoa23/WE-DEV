@@ -3,105 +3,107 @@ $login-zone-text-color: hsl(0, 0%, 100%);
 $text-font-size: 16px;
 
 
+* {
+    box-sizing: border-box;
+}
+
 body {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: url('./purplegrey.svg') no-repeat;
+    background: url(./purplegrey.svg) no-repeat;
     background-position: center;
     background-size: cover;
 }
 
-.login-zone {
+.wrapper {
     width: 420px;
     background: transparent;
+    color: $login-zone-text-color;
     padding: 30px 40px;
     color: $login-zone-text-color;
     border-radius: 10px;
     border: 2px solid rgba(255, 255, 255, .2);
-    backdrop-filter: blur();
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .2);  
 }
 
-.login-zone h1 {
+.wrapper h1 {
     font-size: 36px;
     text-align: center;
-    color: $login-zone-text-color;
 }
 
-.login-zone .input-box{
-    width: 80%;
-    height: 45px;
-    margin: 0px 0;
-    padding: 10px;
+.wrapper .form-group {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    //background: salmon;
+    margin: 20px 0;
 }
 
-.input-box input {
+.form-group .form-control {
     width: 100%;
     height: 100%;
+    background: transparent;
     border: none;
     outline: none;
-    background: transparent;
     border: 2px solid rgba(255, 255, 255, .2);
-    border-radius: 40px;;
+    border-radius: 40px;
     font-size: $text-font-size;
     color: $login-zone-text-color;
-    padding-left: 50px; 
-    text-indent: 0px;
+    padding: 20px 45px 20px 50px;
 }
 
-.input-box input::placeholder {
+.form-group .form-control::placeholder{
     color: $login-zone-text-color;
 }
 
-.input-box {
-    position: relative;
-}
-
-.input-box i {
+.form-group i {
     position: absolute;
-    left: 30px;
+    left: 20px;
     top: 50%;
     transform: translateY(-50%);
     font-size: 25px;
 }
 
-#show{
+.form-group .show {
     position: absolute;
-    left: 360px;
-    top: 55%;
+    right: 60px;
+    top: 50%;
     transform: translateY(-50%);
+    font-size: 20px;
+    border: none;
+    outline: none;
+    background: transparent;
     font-size: 25px;
+    color: $login-zone-text-color;
 }
 
-.login-zone .remember-forget {
+.wrapper .form-check {
     display: flex;
     justify-content: space-between;
-    font-size: $text-font-size;  
-    margin: 15px 0 15px;
+    font-size: $text-font-size;
+    margin: 15px 0px 15px;
 }
 
-.remember-forget label input {
+.form-check .form-check-label .form-check-input{
     accent-color: $login-zone-text-color;
-    margin: 0px 0px 0px 30px;
+    margin: 3px 5px 0px 0px;
 }
 
-.remember-forget label {
-    color: $login-zone-text-color;
-}
-
-.remember-forget a {
+.form-check a {
     color: $login-zone-text-color;
     text-decoration: none;
-    margin: 0 30px 0 0;
+    margin: 0 15px 0 0;
 }
 
-.remember-forget a:hover {
+.form-check a:hover {
     text-decoration: underline;
 }
 
 #login-btn {
-    width: 80%;
+    width: 100%;
     height: 45px;
     padding: 10px;
     background: #fff;
@@ -113,14 +115,14 @@ body {
     font-size:$text-font-size;
     color: #333;
     font-weight: 600;
-    margin-left: 40px;
+    //margin-left: 40px;
 }
 
 .register {
     color: $login-zone-text-color;
 }
 
-.login-zone .register {
+.wrapper .register {
     font-size: $text-font-size;
     text-align: center;
     margin: 20px 0 15px;

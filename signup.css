@@ -1,0 +1,18 @@
+body {
+  width: 420px;
+  background: url(./purplegrey.svg) no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.form-group {
+  width: 100%;
+  height: 45px;
+  padding: 10px;
+}
+
+.form-check {
+  font: 100%;
+}
+
+/*# sourceMappingURL=signup.css.map */
