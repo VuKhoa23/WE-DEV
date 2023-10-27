@@ -7,6 +7,7 @@ const cors = require("cors");
 
 const indexRouter = require("./routes/index");
 const authRouter = require("./routes/auth");
+const appRouter = require("./routes/wedev");
 const app = express();
 
 // Get around CORS policy
@@ -32,10 +33,11 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/wedev", authRouter);
+app.use("/wedev", appRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  res.send("Error happened");
+  res.send("404");
 });
 
 module.exports = app;
