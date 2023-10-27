@@ -4,10 +4,12 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
+const { checkCurrentUser } = require("./middlewares/authMiddleWares");
 
 const indexRouter = require("./routes/index");
 const authRouter = require("./routes/auth");
 const appRouter = require("./routes/wedev");
+const adminRouter = require("./routes/wedevAdmin");
 const app = express();
 
 // Get around CORS policy
@@ -31,9 +33,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+app.get("*", checkCurrentUser);
+
 app.use("/", indexRouter);
 app.use("/wedev", authRouter);
 app.use("/wedev", appRouter);
+app.use("/wedev-admin", adminRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

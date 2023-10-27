@@ -2,7 +2,12 @@
 
 <h1 class="text-center ">Anyone can see this</h1>
 <div class="text-center ">
+  <% if(email){ %>
+  <h1>Welcome <%= email %></h1>
+  <% } else{ %>
   <a href="login">LOG IN</a>
   <a href="signup">SIGN UP</a>
+  <% } %>
+
 </div>
 <%- include('partials/footer'); -%>

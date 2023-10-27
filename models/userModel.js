@@ -20,8 +20,7 @@ const userSchema = new mongoose.Schema({
   },
   gender: {
     type: String,
-    gender: ["male", "female"],
-    default: null,
+    enum: ["male", "female"],
   },
   address: {
     type: String,
@@ -30,6 +29,11 @@ const userSchema = new mongoose.Schema({
   image: {
     type: String,
     default: null,
+  },
+  role: {
+    type: String,
+    enum: ["admin", "user"],
+    default: "user",
   },
 });
 
