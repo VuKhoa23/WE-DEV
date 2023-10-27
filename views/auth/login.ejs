@@ -1,0 +1,13 @@
+<%- include('../partials/header'); -%>
+
+<% if (message) { %>
+<div class="alert alert-info"><%= message %></div>
+<% } %>
+
+<form action="login" method="post">
+  <input type="email" name="email" placeholder="email" required /> <br>
+  <input type="password" name="password" placeholder="password" required /> <br>
+  <input type="submit" value="SUBMIT" />
+</form>
+
+<%- include('../partials/footer'); -%>
