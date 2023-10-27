@@ -41,7 +41,7 @@ body {
     margin: 20px 0;
 }
 
-.form-group .form-control1 {
+.form-group .form-control {
     width: 100%;
     height: 100%;
     background: transparent;
@@ -54,9 +54,15 @@ body {
     padding: 20px 45px 20px 50px;
 }
 
-.form-group .form-control1::placeholder{
+.form-group .form-control:focus{
+    background: transparent;
+    outline: none;
+}
+
+.form-group .form-control::placeholder{
     color: $login-zone-text-color;
 }
+
 
 .form-group i {
     position: absolute;
@@ -114,7 +120,6 @@ body {
     font-size:$text-font-size;
     color: #333;
     font-weight: 600;
-    //margin-left: 40px;
 }
 
 .register {
