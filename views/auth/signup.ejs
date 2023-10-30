@@ -1,10 +1,129 @@
 <%- include('../partials/header'); -%>
 
-<form action="signup" method="post">
-  <input type="email" name="email" placeholder="email" required /> <br>
-  <input type="text" name="username" placeholder="username" required /> <br>
-  <input type="password" name="password" placeholder="password" required /> <br>
-  <input type="submit" value="SUBMIT" />
-</form>
+<div id="container">
+  <div class="header">
+    <img src="/images/logo1.png" alt="">
+    <p>Mạng xã hội dành cho lập trình viên</p>
+  </div>
+
+  <div class="main">
+    <div class="icon">
+      <div class="upper-icon">
+        <img src="/images/Internet-60b6.svg" alt="">
+      </div>
+      <div class="lower-icon">
+        <div class="left-image">
+          <img src="/images/Online studying-60b6.svg" alt="">
+        </div>
+        <div class="right-image">
+          <img src="/images/Hacker-60b6.svg" alt="">
+        </div>
+      </div>
+    </div>
+
+    <div class="wrapper">
+      <form id="signupForm">
+        <h1>Sign Up</h1>
+        <div class="form-group">
+          <input id="email" name="email" type="email" placeholder="Email" class="form-control" required>
+          <i class='bx bxs-envelope'></i>
+        </div>
+
+        <div class="form-group">
+          <input id="username" name="username" type="text" placeholder="Username" class="form-control" required>
+          <i class='bx bxs-user'></i>
+        </div>
+
+
+        <div class="form-group">
+          <input name="password" type="password" placeholder="Password" class="form-control" id="password" required>
+          <i class='bx bxs-lock'></i>
+          <div class="show">
+            <i class='bx bxs-show' id="show-icon-pw"></i>
+          </div>
+        </div>
+        <div class="form-group">
+          <input type="password" id="cfpw" placeholder="Confirm Password" class="form-control" required>
+          <i class='bx bxs-lock'></i>
+          <div class="show">
+            <i class='bx bxs-show' id="show-icon-cfpw"></i>
+          </div>
+        </div>
+
+        <div class="form-check">
+          <label for="remember" class="form-check-label">
+            <input type="checkbox" name="remember" id="remember" class="form-check-input" required>
+            I argee with privacy and policy
+          </label>
+        </div>
+
+        <button id="login-btn">Sign up</button>
+
+        <div class="register">
+          <p>Already have an accout ? <a href="/wedev/login">Log in</a></p>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelector('#show-icon-pw').onmousedown = function () {
+      document.querySelector('#password').type = 'text';
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelector('#show-icon-pw').onmouseup = function () {
+      document.querySelector('#password').type = 'password';
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelector('#show-icon-cfpw').onmousedown = function () {
+      document.querySelector('#cfpw').type = 'text';
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelector('#show-icon-cfpw').onmouseup = function () {
+      document.querySelector('#cfpw').type = 'password';
+    }
+  });
+
+  $(document).ready(function () {
+    $("#signupForm").submit(async function (e) {
+      e.preventDefault();
+      const cfpw = $("#cfpw").val();
+      const email = $("#email").val();
+      const username = $("#username").val();
+      const password = $("#password").val();
+      if (cfpw != password) {
+        alert("Wrong confirmation password")
+      }
+      else {
+        try {
+          const res = await fetch('/wedev/signup', {
+            method: 'POST',
+            body: JSON.stringify({ email, password, username }),
+            headers: { 'Content-Type': 'application/json' }
+          });
+          const data = await res.json();
+          if (data.message != undefined) {
+            location.assign('/wedev/login?signedUp=true');
+          }
+          else {
+            alert(data.errors);
+          }
+        }
+        catch (err) {
+          console.log(err);
+        }
+      }
+    })
+  })
+</script>
 
 <%- include('../partials/footer'); -%>

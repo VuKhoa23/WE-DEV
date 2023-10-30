@@ -4,22 +4,31 @@ const path = require("path");
 require("dotenv").config({ path: path.join(__dirname, "../.env") });
 
 function handleError(err) {
-  const theError = { username: "", email: "", password: "" };
+  const errors = { username: "", email: "", password: "" };
+
+  if (err.message.includes("E11000")) {
+    if (err.message.includes("username:")) {
+      errors.username = "Duplicate username";
+    } else {
+      errors.email = "Duplicate email";
+    }
+  }
+
   if (err.message === "incorrect email") {
-    theError.email = "That email is not registered";
+    errors.email = "That email is not registered";
   }
 
   // incorrect password
   if (err.message === "incorrect password") {
-    theError.password = "That password is incorrect";
+    errors.password = "That password is incorrect";
   }
 
   if (err.message.includes("user validation failed")) {
     Object.values(err.errors).forEach(({ properties }) => {
-      theError[properties.path] = properties.message;
+      errors[properties.path] = properties.message;
     });
   }
-  return theError;
+  return errors;
 }
 
 const maxAge = 3 * 24 * 60 * 60;
@@ -36,30 +45,22 @@ module.exports.signup_get = (req, res, next) => {
 
 module.exports.signup_post = async (req, res, next) => {
   const { username, email, password } = req.body;
+  console.log(username, email, password);
   try {
     const user = await User.create({ username, email, password });
-    const token = createToken(user._id);
-    res.redirect("login?signup=true");
+    res.status(200).json({ message: "success" });
   } catch (err) {
     // check the mongoose error code
-    if (err.message.includes("E11000")) {
-      if (err.message.includes("username:")) {
-        res.status(400).send({ error: "Duplicate username" });
-        return;
-      } else {
-        res.status(400).send({ error: "Duplicate email" });
-        return;
-      }
-    }
-    const theError = handleError(err);
-    res.status(400).send(theError);
+    const errors = handleError(err);
+    res.status(400).json({ errors });
   }
 };
 
 module.exports.login_get = (req, res, next) => {
   let message = "";
-  if (req.query.signup != undefined) {
+  if (req.query.signedUp != undefined) {
     message = "You now can login";
+    console.log(message);
   }
   res.render("auth/login", { title: "Login", message: message });
 };
@@ -74,7 +75,14 @@ module.exports.login_post = async (req, res, next) => {
     res.redirect("home");
   } catch (err) {
     const errors = handleError(err);
-    res.status(400).json({ errors });
+    if (errors.email != "") {
+      res.redirect("/wedev/login?email=false");
+      return;
+    } else if (errors.password != "") {
+      res.redirect("/wedev/login?password=false");
+      return;
+    }
+    res.redirect("/wedev/login");
   }
 };
 
