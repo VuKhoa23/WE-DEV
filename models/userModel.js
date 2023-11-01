@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
+const Schema = require("mongoose").Schema;
 const { isEmail } = require("validator");
 const bcrypt = require("bcrypt");
+const Post = require("../models/postModel");
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -35,6 +37,7 @@ const userSchema = new mongoose.Schema({
     enum: ["admin", "user"],
     default: "user",
   },
+  posts: [{ type: Schema.Types.ObjectId, ref: "Post" }],
 });
 
 userSchema.statics.login = async function (email, password) {
@@ -55,5 +58,9 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-const User = mongoose.model("user", userSchema);
+userSchema.post("findOneAndRemove", async function (doc) {
+  await Post.deleteMany({ owner: doc._id });
+});
+
+const User = mongoose.model("User", userSchema);
 module.exports = User;

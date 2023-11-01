@@ -28,7 +28,7 @@ const server = http.createServer(app);
  */
 
 mongoose
-  .connect(process.env.MONGO_DB_PRODUCTION)
+  .connect(process.env.MONGO_DB_KHOA)
   .then(() => {
     console.log("connected to MongoDB");
     server.listen(port);
