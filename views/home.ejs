@@ -9,8 +9,8 @@
   <div class="row ">
     <div class="col-3"></div>
     <div class="col-6">
-      <form action="/api/wedev/posts" method="POST">
-        <input type="hidden" name="userId" value="<%= user._id %>" />
+      <form id="newPost">
+        <input type="hidden" name="userId" id="userId" value="<%= user._id %>" />
         <div class="form-group">
           <label for="content">NEW POST</label>
           <textarea name="content" style="background-color: aquamarine;" class="form-control" id="content" rows="3"></textarea>
@@ -58,16 +58,28 @@
     $("#loadMoreBtn").click(function () {
       getPosts(posts);
     })
-  })
-  let user = '<%- JSON.stringify(user) %>';
-  user = JSON.parse(user);
-  function populateComment(post, user) {
-    let commentHTML = ""
-    if (post.owner.username === user.username) {
-      commentHTML = `
-      <div id="${post._id}" style="height: 10rem;transition: height 0.3s">
-        <div style="height: 2rem;" class="d-flex justify-content-between">
-          <span style="line-height: 1.5rem;" class="badge bg-success">
+
+    $("#newPost").submit(async function (e) {
+      e.preventDefault();
+      const userId = $("#userId").val();
+      const content = $("#content").val();
+      const response = await fetch(`/api/wedev/posts`, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify({ userId: userId, content: content })
+      })
+      let post = await response.json();
+      post = post["post"];
+
+      $("#content").empty();
+
+      let postHTML = `
+      <div id="${post._id}" style="height: 10rem; opacity: 0;visibility: visible;transition: height 0.3s, opacity 0.3s ease-out, visibility 0.3s">
+        <div style="height: 20%;" class="d-flex justify-content-between">
+          <span style="line-height: 15%;" class="badge bg-success">
             ${post.owner.username} - ${post.createdAt}
           </span>
           <button onclick="deletePost('${post._id}')" class="btn btn-danger h-100"><i class='bx bxs-trash'></i></button>
@@ -80,12 +92,41 @@
         </div>
       </div>
     `
+      $("#postsContainer").prepend(postHTML)
+      setTimeout(() => {
+        $(`#${post._id}`).css("opacity", 1);
+      }, 100)
+    })
+  })
+
+
+  let user = '<%- JSON.stringify(user) %>';
+  user = JSON.parse(user);
+  function populatePosts(post, user) {
+    let postHTML = ""
+    if (post.owner.username === user.username) {
+      postHTML = `
+        <div div id = "${post._id}" style = "visibility: visible; height: 10rem; opacity: 1;transition: height 0.3s, opacity 0.3s ease-out, visibility 0.3s" >
+        <div style="height: 20%;" class="d-flex justify-content-between">
+          <span style="line-height: 15%;" class="badge bg-success">
+            ${post.owner.username} - ${post.createdAt}
+          </span>
+          <button onclick="deletePost('${post._id}')" class="btn btn-danger h-100"><i class='bx bxs-trash'></i></button>
+        </div>
+
+        <div class="card mb-2">
+          <div class="card-body">
+            <textarea readonly class='form-control' rows = 3>${post.content}</textarea>
+          </div>
+        </div >
+      </div >
+        `
     }
     else {
-      commentHTML = `
-      <div style="height: 10rem;transition: height 0.3s">
-        <div style="height: 2rem;" class="d-flex justify-content-between">
-          <span style="line-height: 1.5rem;" class="badge bg-success">
+      postHTML = `
+        <div div style = "height: 10rem;transition: height 0.3s" >
+        <div style="height: 20%;" class="d-flex justify-content-between">
+          <span style="line-height: 15%;" class="badge bg-success">
             ${post.owner.username} - ${post.createdAt}
           </span>
         </div>
@@ -94,11 +135,11 @@
           <div class="card-body">
             <textarea readonly class='form-control' rows = 3>${post.content}</textarea>
           </div>
-        </div>
-      </div>
-    `
+        </div >
+      </div >
+        `
     }
-    return commentHTML;
+    return postHTML;
   }
 
   let limit = 10;
@@ -110,7 +151,7 @@
     posts["posts"].forEach((post) => {
       count++;
       if (count > limit - 10 && count <= limit) {
-        container.append(populateComment(post, user))
+        container.append(populatePosts(post, user))
       }
     });
 
@@ -125,8 +166,18 @@
   }
 
   async function deletePost(id) {
-    const res = fetch(`/api/wedev/posts/delete?postId=${id}`);
-    $(`#${id}`).css("height", 0);
+    const res = await fetch(`/api/wedev/posts/delete`, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: "DELETE",
+      body: JSON.stringify({ postId: id })
+    });
+    $(`#${id} `).css("height", 0);
+    $(`#${id}`).css("opacity", 0);
+    $(`#${id}`).css("visibility", "hidden");
+
   }
 
 </script>

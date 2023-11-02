@@ -8,6 +8,6 @@ router.post("/posts", postController.createPost);
 
 router.get("/posts", postController.getPosts);
 
-router.get("/posts/delete", postController.deletePost);
+router.delete("/posts/delete", postController.deletePost);
 
 module.exports = router;
