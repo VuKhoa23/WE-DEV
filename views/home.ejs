@@ -1,9 +1,109 @@
 <%- include('partials/header'); -%>
 
-<h1 class="text-center ">You must log in to see this</h1>
-<div class="text-center ">
-  <h1>Welcome <%= email %></h1>
-  <a href="/wedev/logout">LOG OUT</a>
+<div class="d-flex justify-content-between ">
+  <h1>Nav bar here</h1>
+  <h1>Welcome <%= user.username %></h1>
 </div>
+
+<div class="container-fluid ">
+  <div class="row ">
+    <div class="col-3"></div>
+    <div class="col-6">
+      <form action="/api/wedev/posts" method="POST">
+        <input type="hidden" name="userId" value="<%= user._id %>" />
+        <div class="form-group">
+          <label for="content">NEW POST</label>
+          <textarea name="content" style="background-color: aquamarine;" class="form-control" id="content" rows="3"></textarea>
+        </div>
+        <div class="float-end  ">
+          <button type="submit" class="btn btn-primary m-2 ">Post</button>
+        </div>
+      </form>
+    </div>
+    <div class="col-3"></div>
+  </div>
+
+  <hr>
+
+  <h1 class="text-center">Recent posts</h1>
+
+  <div class="row">
+
+    <div style="background-color: blueviolet;" class="col-3 h-100 d-inline-block"></div>
+    <div class="col-6" id="postsContainer"></div>
+    <div style="background-color: blueviolet;" class="col-3 h-100 d-inline-block"></div>
+  </div>
+
+  <div class="row">
+
+    <div style="background-color: blueviolet;" class="col-3 h-100 d-inline-block"></div>
+    <div class="col-6">
+      <button class="btn btn-primary w-100" id="loadMoreBtn">Load more</button>
+    </div>
+    <div style="background-color: blueviolet;" class="col-3 h-100 d-inline-block"></div>
+  </div>
+
+
+  <div class="text-center ">
+    <a href="/wedev/logout">Logout</a>
+  </div>
+</div>
+
+<script>
+
+  $(document).ready(async function () {
+    const response = await fetch(`/api/wedev/posts?limit=1000`);
+    const posts = await response.json()
+    getPosts(posts);
+    $("#loadMoreBtn").click(function () {
+      getPosts(posts);
+    })
+  })
+
+
+  function populateComment(username, createdAt, content) {
+    let commentHTML = `
+      <div style="height: 2rem;" class="d-flex justify-content-between">
+        <span style="line-height: 1.5rem;" class="badge bg-success">
+          ${username} - ${createdAt}
+        </span>
+        <form>
+          <button class="btn btn-danger h-100"><i class='bx bxs-trash'></i></button>
+        </form>
+      </div>
+
+      <div class="card mb-2">
+        <div class="card-body">
+          ${content}
+        </div>
+      </div>
+  `
+    return commentHTML;
+  }
+
+  let limit = 10;
+
+  async function getPosts(posts) {
+    container = $("#postsContainer");
+
+    let count = 0;
+    posts["posts"].forEach((post) => {
+      count++;
+      if (count > limit - 10 && count <= limit) {
+        container.append(populateComment(post.owner.username, post.createdAt, post.content))
+      }
+    });
+
+    if (count < limit) {
+      $("#loadMoreBtn").css("display", "none");
+    }
+    else {
+      $("#loadMoreBtn").css("display", "block");
+    }
+    limit += 10;
+
+  }
+
+</script>
 
 <%- include('partials/footer'); -%>

@@ -1,12 +1,13 @@
 const mongoose = require("mongoose");
 const path = require("path");
 require("dotenv").config({ path: path.join(__dirname, "../.env") });
-const User = require("../models/userModel");
 const Post = require("../models/postModel");
 
 /* Connecting to the database before each test. */
 beforeAll(async () => {
-  await mongoose.connect(process.env.MONGO_DB_KHOA);
+  await mongoose.connect(process.env.MONGO_DB_KHOA, {
+    useUnifiedTopology: false,
+  });
 });
 
 describe("Create a user and post and assign to each other", () => {
@@ -20,6 +21,12 @@ describe("Create a user and post and assign to each other", () => {
     const post = await Post.create({ content, owner: user._id });
 
     user.posts.push(post._id);
+    await user.save();
+
+    const content2 = "I feel so sad";
+    const post2 = await Post.create({ content: content2, owner: user._id });
+
+    user.posts.push(post2._id);
     await user.save();
     expect(user.posts.length > 0);
   });
@@ -37,6 +44,6 @@ describe("Delete the user", () => {
   });
 });
 
-afterAll(async () => {
-  await mongoose.connection.close();
-});
+// afterAll(async () => {
+//   await mongoose.connection.close();
+// });

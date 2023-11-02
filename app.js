@@ -10,6 +10,8 @@ const indexRouter = require("./routes/index");
 const authRouter = require("./routes/auth");
 const appRouter = require("./routes/wedev");
 const adminRouter = require("./routes/wedevAdmin");
+
+const postsApi = require("./api/posts.js");
 const app = express();
 
 // Get around CORS policy
@@ -38,6 +40,7 @@ app.get("*", checkCurrentUser);
 app.use("/", indexRouter);
 app.use("/wedev", authRouter);
 app.use("/wedev", appRouter);
+app.use("/api/wedev", postsApi);
 app.use("/wedev-admin", adminRouter);
 
 // catch 404 and forward to error handler
