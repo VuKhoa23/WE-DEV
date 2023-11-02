@@ -59,25 +59,45 @@
       getPosts(posts);
     })
   })
-
-
-  function populateComment(username, createdAt, content) {
-    let commentHTML = `
+  let user = '<%- JSON.stringify(user) %>';
+  user = JSON.parse(user);
+  function populateComment(post, user) {
+    let commentHTML = ""
+    console.log(user)
+    if (post.owner.username === user.username) {
+      commentHTML = `
       <div style="height: 2rem;" class="d-flex justify-content-between">
         <span style="line-height: 1.5rem;" class="badge bg-success">
-          ${username} - ${createdAt}
+          ${post.owner.username} - ${post.createdAt}
         </span>
-        <form>
-          <button class="btn btn-danger h-100"><i class='bx bxs-trash'></i></button>
+        <form action="/api/wedev/posts/delete" method="delete">
+          <input type="hidden" name="postId" value="${post._id}" />
+          <button type="submit" class="btn btn-danger h-100"><i class='bx bxs-trash'></i></button>
         </form>
       </div>
 
       <div class="card mb-2">
         <div class="card-body">
-          ${content}
+          ${post.content}
         </div>
       </div>
-  `
+    `
+    }
+    else {
+      commentHTML = `
+      <div style="height: 2rem;" class="d-flex justify-content-between">
+        <span style="line-height: 1.5rem;" class="badge bg-success">
+          ${post.owner.username} - ${post.createdAt}
+        </span>
+      </div>
+
+      <div class="card mb-2">
+        <div class="card-body">
+          ${post.content}
+        </div>
+      </div>
+    `
+    }
     return commentHTML;
   }
 
@@ -90,7 +110,7 @@
     posts["posts"].forEach((post) => {
       count++;
       if (count > limit - 10 && count <= limit) {
-        container.append(populateComment(post.owner.username, post.createdAt, post.content))
+        container.append(populateComment(post, user))
       }
     });
 
