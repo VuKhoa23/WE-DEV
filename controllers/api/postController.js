@@ -26,5 +26,5 @@ module.exports.getPosts = async (req, res, next) => {
 module.exports.deletePost = async (req, res, next) => {
   const _id = req.query.postId;
   await Post.findOneAndDelete({ _id });
-  res.redirect("/wedev/home");
+  res.status(200).send("OK");
 };

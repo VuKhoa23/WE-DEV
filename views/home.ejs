@@ -49,7 +49,7 @@
   </div>
 </div>
 
-<script>
+<script type="text/javascript">
 
   $(document).ready(async function () {
     const response = await fetch(`/api/wedev/posts?limit=1000`);
@@ -63,37 +63,37 @@
   user = JSON.parse(user);
   function populateComment(post, user) {
     let commentHTML = ""
-    console.log(user)
     if (post.owner.username === user.username) {
       commentHTML = `
-      <div style="height: 2rem;" class="d-flex justify-content-between">
-        <span style="line-height: 1.5rem;" class="badge bg-success">
-          ${post.owner.username} - ${post.createdAt}
-        </span>
-        <form action="/api/wedev/posts/delete" method="delete">
-          <input type="hidden" name="postId" value="${post._id}" />
-          <button type="submit" class="btn btn-danger h-100"><i class='bx bxs-trash'></i></button>
-        </form>
-      </div>
+      <div id="${post._id}" style="height: 10rem;transition: height 0.3s">
+        <div style="height: 2rem;" class="d-flex justify-content-between">
+          <span style="line-height: 1.5rem;" class="badge bg-success">
+            ${post.owner.username} - ${post.createdAt}
+          </span>
+          <button onclick="deletePost('${post._id}')" class="btn btn-danger h-100"><i class='bx bxs-trash'></i></button>
+        </div>
 
-      <div class="card mb-2">
-        <div class="card-body">
-          ${post.content}
+        <div class="card mb-2">
+          <div class="card-body">
+            <textarea readonly class='form-control' rows = 3>${post.content}</textarea>
+          </div>
         </div>
       </div>
     `
     }
     else {
       commentHTML = `
-      <div style="height: 2rem;" class="d-flex justify-content-between">
-        <span style="line-height: 1.5rem;" class="badge bg-success">
-          ${post.owner.username} - ${post.createdAt}
-        </span>
-      </div>
+      <div style="height: 10rem;transition: height 0.3s">
+        <div style="height: 2rem;" class="d-flex justify-content-between">
+          <span style="line-height: 1.5rem;" class="badge bg-success">
+            ${post.owner.username} - ${post.createdAt}
+          </span>
+        </div>
 
-      <div class="card mb-2">
-        <div class="card-body">
-          ${post.content}
+        <div class="card mb-2">
+          <div class="card-body">
+            <textarea readonly class='form-control' rows = 3>${post.content}</textarea>
+          </div>
         </div>
       </div>
     `
@@ -122,6 +122,11 @@
     }
     limit += 10;
 
+  }
+
+  async function deletePost(id) {
+    const res = fetch(`/api/wedev/posts/delete?postId=${id}`);
+    $(`#${id}`).css("height", 0);
   }
 
 </script>
